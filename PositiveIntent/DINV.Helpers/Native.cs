@@ -157,7 +157,7 @@ public static class Native
                 break;
 
             default:
-                throw new InvalidOperationException($"Invalid ProcessInfoClass: {processInfoClass}");
+                throw new InvalidOperationException("Invalid ProcessInfoClass: {processInfoClass}");
         }
 
         object[] parameters =

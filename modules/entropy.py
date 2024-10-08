@@ -1,5 +1,6 @@
 import argparse
 import math
+import os
 
 def shannon_entropy(data):
     # 256 different possible values
@@ -18,9 +19,9 @@ def shannon_entropy(data):
 
         p = float(possible[i] / data_len)
         entropy -= p * math.log(p, 2)
-    return entropy
+    return round(entropy, 2)
 
-def run():
-    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..\\temp\\PositiveIntent\\bin\\Release\\net48\\PositiveIntent.exe"), 'rb') as file:
+def run(assembly_output_path):
+    with open(assembly_output_path, 'rb') as file:
         return(shannon_entropy(file.read()))
         

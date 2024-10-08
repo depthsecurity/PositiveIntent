@@ -1,4 +1,5 @@
 import os
+import colorama
 
 class RC4:
     def __init__(self, key):
@@ -36,12 +37,11 @@ def encrypt_file(input_file_path, output_file_path, key):
 
     # Encrypt the file bytes
     encrypted_bytes = rc4.encrypt_decrypt(file_bytes)
-    print(f"Encrypted {os.path.basename(input_file_path.name)}")
     
     # Write the encrypted bytes to a new file
     with open(output_file_path, 'wb') as file:
         file.write(encrypted_bytes)
-        print(f"Embedded {os.path.basename(input_file_path.name)} as a resource file")
+        print(colorama.Fore.GREEN + "[+] " + colorama.Style.RESET_ALL + f"Encrypted and embedded {input_file_path.name} as a resource file")
 
 # Example usage
 def run(file):

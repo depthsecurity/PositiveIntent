@@ -3,6 +3,7 @@ import re
 import shutil
 import random
 import string
+import colorama
 
 # Function to reverse a string
 def obfuscate_string(original_string, string_map):
@@ -118,7 +119,5 @@ def run(hostname):
                     file.write(content)
                     file.truncate()
 
-    print('Obfuscated method names')
-    print('Obfuscated variable names')
-    print('Obfuscated strings')
-    print(f'Keyed on hostname {hostname}')
+    print(colorama.Fore.GREEN + "[+] " + colorama.Style.RESET_ALL + f'Obfuscated loader source files')
+    print(colorama.Fore.GREEN + "[+] " + colorama.Style.RESET_ALL + f'Keyed on hostname {hostname}')
