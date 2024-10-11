@@ -12,7 +12,7 @@
   - ETW disabled via process fork with environment variable `COMPlus_ETWEnabled` set to zero
   - AmsiScanBuffer patched in-memory (via D/Invoke)
 - Static Signature & Memory Scanning Evasion
-  - Python pre-build script obfuscates all methods, variables, and strings before building the loader
+  - Python pre-build script obfuscates all (most) methods, variables, and strings before building the loader
   - Your .NET assembly of choice (Rubeus, Seatbelt, etc.) is embedded in the loader as a resource file and RC4 encrypted
   - Certain variables, such as the byte array containing the opcodes used for patching AmsiScanBuffer, are also RC4 encrypted
   - No suspicious usage of crypto libraries - RC4 encryption/decryption is performed using a "raw" implementation of the RC4 algorithm (thanks ChatGPT)
