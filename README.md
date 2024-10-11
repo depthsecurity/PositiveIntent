@@ -51,6 +51,7 @@ python build.py --file "..\Rubeus.exe" --hostname JOE-WIN10-VM --domain www.zoom
 | SentinelOne | Rubeus | Undetected (10/11/2024) |
 | CrowdStrike | Rubeus | Undetected (10/11/2024) |
 | CrowdStrike | Seeker | Undetected (10/11/2024) |
+| CrowdStrike | Internal Monologue | Detected (Behavioral) |
 | Windows Defender | Rubeus | Undetected (10/10/2024) |
 | Windows Defender | Seatbelt | Undetected (10/10/2024) |
 
