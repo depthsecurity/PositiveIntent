@@ -82,8 +82,8 @@ def process_file(file_path, obfuscation_map, string_map):
 
 def run(hostname):
     # Input and output directories
-    input_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..\\")
-    output_dir =  os.path.join(os.path.dirname(os.path.abspath(__file__)), "..\\temp")
+    input_dir = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..\\"))
+    output_dir =  os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..\\temp"))
 
     # Copy unobfuscated source to preserve it
     if(os.path.exists(output_dir)):

