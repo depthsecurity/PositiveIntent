@@ -55,6 +55,8 @@ python build.py --file "..\Rubeus.exe" --hostname JOE-WIN10-VM --domain www.zoom
 
 ## Roadmap
 
+- Add option to key on username
+- Add some sort of DNS blackhole sandbox check
 - Add obfuscation of class names to `obfuscate.py`
 - Add obfuscation of namespace names `obfuscate.py`
 - Programatically generate and randomize `assemblyinfo.cs`
