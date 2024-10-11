@@ -50,3 +50,10 @@ python build.py --file "..\Rubeus.exe" --hostname JOE-WIN10-VM --domain www.zoom
 | CrowdStrike | Rubeus | Undetected |
 | Windows Defender | Rubeus | Undetected (10/10/2024) |
 | Windows Defender | Seatbelt | Undetected (10/10/2024) |
+
+## Roadmap
+
+- Add obfuscation of class names to `obfuscate.py`
+- Add obfuscation of namespace names `obfuscate.py`
+- Programatically generate and randomize `assemblyinfo.cs`
+- ???
