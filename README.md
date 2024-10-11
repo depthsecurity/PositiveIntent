@@ -18,9 +18,9 @@
   - No suspicious usage of crypto libraries - RC4 encryption/decryption is performed using a "raw" implementation of the RC4 algorithm (thanks ChatGPT)
 - Miscellaneous AV/EDR Evasion Features
   - Python post-build script signs the loader with a self-signed certificate using values cloned from a domain of your choice
-  - No P/Invoke. Full implementation of D/Invoke with API hashing.
+  - No P/Invoke - full implementation of D/Invoke with API hashing
 - Compatibility
-  - Built with .NET Framework 4.8 and C# 7.3 to ensure maximum compatibility with various Windows versions.
+  - Built with .NET Framework 4.8 and C# 7.3 to ensure maximum compatibility with various Windows versions
 
 ## Installation
 
