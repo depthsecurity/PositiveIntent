@@ -5,7 +5,7 @@
 
 - Sandbox Evasion
   -  Hostname keying
-  -  Delayed execution (not susceptible to time acceleration)
+  -  Delayed execution (busy wait loop - less susceptible to time acceleration)
 - Shannon Entropy Normalization
   - Copyright free English books are embedded as resource files in the loader to keep entropy between 4.50-5.50
 - ETW and AMSI Bypasses
