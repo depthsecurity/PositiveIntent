@@ -10,20 +10,19 @@ def obfuscate_string(original_string, string_map):
     string_map[original_string] = f'StringHelper.Reverse({original_string[::-1]})'
     return string_map[original_string]
 
-# Function to generate a random 8-character obfuscated name
-def generate_random_string(length=8):
-    return ''.join(random.choices(string.ascii_letters, k=length))
-
 # Function to obfuscate names
 def obfuscate_name(original_method, obfuscation_map):
     if original_method not in obfuscation_map:
-        obfuscated = generate_random_string()
+        obfuscated = ''.join(random.choices(string.ascii_letters, k=8))
         obfuscation_map[original_method] = obfuscated
     return obfuscation_map[original_method]
 
 def update_references(content, obfuscation_map):
     for original_name, obfuscated_name in obfuscation_map.items():
         content = re.sub(rf'\b{original_name}\b', obfuscated_name, content)
+        # change namespace back for resource loading
+        if original_name == 'PositiveIntent':
+            content = re.sub(rf'{obfuscated_name}\.Properties\.Resources\.File1', f'{original_name}.Properties.Resources.File1', content)
     return content
 
 def update_strings(content, string_map):
@@ -42,7 +41,7 @@ def update_delay(content, delay):
     content = re.sub(r'13371337', str(delay * 1000), content)
     return content
 
-# Function to obfuscate method names and their references
+# Function to obfuscate method names
 def obfuscate_methods(content, obfuscation_map):
     method_pattern = re.compile(r'(public|private|protected|internal)\s(static|delegate)\s(.*NTSTATUS|void|int|double|IntPtr|string|bool|uint|T)\s(\w*)')
     for match in method_pattern.finditer(content):
@@ -50,12 +49,32 @@ def obfuscate_methods(content, obfuscation_map):
         if original_method != 'Main' and original_method != 'Reverse':
             obfuscate_name(original_method, obfuscation_map)
 
-# Function to obfuscate method names and their references
+# Function to obfuscate class names
+def obfuscate_classes(content, obfuscation_map):
+    class_pattern = re.compile(r'(class)\s(\w*)')
+    for match in class_pattern.finditer(content):
+        original_class = match.group(2)
+        if original_class != 'StringHelper' and original_class != 'Generic' and original_class != "for":
+            obfuscate_name(original_class, obfuscation_map)
+
+# Function to obfuscate class names
+def obfuscate_namespaces(content, obfuscation_map):
+    namespace_pattern = re.compile(r'(namespace)\s(\w*)\s|(namespace)\s(\w*)\.(\w*)\s')
+    for match in namespace_pattern.finditer(content):
+        original_namespace = match.group(2)
+        if match.group(2) != None:
+            original_namespace = match.group(2)
+            obfuscate_name(original_namespace, obfuscation_map)
+        elif match.group(5) != None:
+            original_namespace = match.group(5)
+            obfuscate_name(original_namespace, obfuscation_map)
+
+# Function to obfuscate variables
 def obfuscate_variables(content, obfuscation_map):
-    variable_pattern = re.compile(r'(var|object\[\]|uint|bool|string|IntPtr)\s(\w*)\s=')
+    variable_pattern = re.compile(r'(var|object\[\]|uint|bool|string|int|byte\[\]|IntPtr)\s(\w*)\s=')
     for match in variable_pattern.finditer(content):
         original_variable = match.group(2)
-        if original_variable != 'System':
+        if original_variable != 'System' and original_variable != "Size":
             obfuscate_name(original_variable, obfuscation_map)
 
 # Function to obfuscate non-const strings
@@ -82,6 +101,8 @@ def process_file(file_path, obfuscation_map, string_map):
 
     obfuscate_methods(content, obfuscation_map)
     obfuscate_variables(content, obfuscation_map)
+    obfuscate_classes(content, obfuscation_map)
+    obfuscate_namespaces(content, obfuscation_map)
     obfuscate_strings(content, obfuscation_map, string_map)
 
 def run(hostname, delay):

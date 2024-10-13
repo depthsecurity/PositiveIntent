@@ -5,7 +5,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace PositiveIntent.DynamicInvoke
+namespace PositiveIntent.DINV
 {
     /// <summary>
     /// Contains function prototypes and wrapper functions for dynamically invoking NT API Calls.

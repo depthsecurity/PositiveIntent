@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
-namespace PositiveIntent.DynamicInvoke
+namespace PositiveIntent.DINV
 {
     public static class Utilities
     {

