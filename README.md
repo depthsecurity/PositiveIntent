@@ -12,7 +12,7 @@
   - ETW disabled via process fork with environment variable `COMPlus_ETWEnabled` set to zero
   - AmsiScanBuffer patched in-memory (via D/Invoke)
 - Static Signature & Memory Scanning Evasion
-  - Python pre-build script obfuscates all (most) methods, variables, and strings before building the loader
+  - Python pre-build script obfuscates all (most) methods, variables, strings, delegates, classes, and namespaces before building the loader
   - Your .NET assembly of choice (Rubeus, Seatbelt, etc.) is embedded in the loader as a resource file and RC4 encrypted
   - Certain variables, such as the byte array containing the opcodes used for patching AmsiScanBuffer, are also RC4 encrypted
   - No suspicious usage of crypto libraries - RC4 encryption/decryption is performed using a "raw" implementation of the RC4 algorithm (thanks ChatGPT)
@@ -62,10 +62,9 @@ python build.py --file /tmp/Internal-Monologue.exe --hostname PFC-SYSCTR --domai
 ## Roadmap
 
 - Add option to key on username
-- ~~Add option to adjust execution delay~~ 
-- Add obfuscation of class names to `obfuscate.py`
-- Add obfuscation of namespace names `obfuscate.py`
 - Programatically generate and randomize `assemblyinfo.cs`
+- Manually map `kernel32.dll` and `ntdll.dll` to bypass AV/EDR vendors using user-mode hooks (e.g. Cylance)
+- Manually parse PE headers of .NET assembly and stomp metadata before loading
 - Port all Python pre/post-build scripts to .NET & cross-compile for Linux
 - Improve error handling
 - ???
