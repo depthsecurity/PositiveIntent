@@ -20,9 +20,11 @@ def obfuscate_name(original_method, obfuscation_map):
 def update_references(content, obfuscation_map):
     for original_name, obfuscated_name in obfuscation_map.items():
         content = re.sub(rf'\b{original_name}\b', obfuscated_name, content)
-        # change namespace back for resource loading
+        # change solution namespace
         if original_name == 'PositiveIntent':
-            content = re.sub(rf'{obfuscated_name}\.Properties\.Resources\.File1', f'{original_name}.Properties.Resources.File1', content)
+            with open(os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../PositiveIntent.sln")), 'r+', encoding='utf-8') as file:
+                additional_content = file.read()
+                additional_content = re.sub(r'{=\s"PositiveIntent"', f'= "{obfuscated_name}"', content)
     return content
 
 def update_strings(content, string_map):
