@@ -32,16 +32,16 @@ sudo bash install.sh
 ## Usage
 
 ```
-python build.py --file /tmp/Rubeus.exe --hostname PFC-SYSCTR --domain www.zoom.com --delay 60
+python build.py --file /tmp/Rubeus.exe --hostname TEST --domain www.zoom.com --delay 60
 
 [+] Obfuscated loader source files
-[+] Keyed on hostname PFC-SYSCTR
+[+] Keyed on hostname TEST
 [+] Encrypted and embedded /tmp/Rubeus.exe as a resource file
 [+] Randomized loader filename
 [+] Embedded 1 books as resource files
 [+] Entropy of loader: 5.35
 [+] Digitally signed loader with certificate cloned from www.zoom.com
-[+] Loader compiled to /tmp/PositiveIntent-main/temp/pwCXupfi.exe
+[+] Loader compiled to /tmp/PositiveIntent/temp/pwCXupfi.exe
 ```
 
 ## Detection Status
