@@ -10,3 +10,13 @@ on:
         options:
           - Rubeus
           - Seeker
+
+jobs:
+  build:
+    runs-on: windows-2019
+
+    steps:
+    
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
