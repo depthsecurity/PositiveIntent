@@ -4,17 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       choice:
-        description: "Select tool"
+        description: "Tool"
         required: true
         type: choice
         options:
           - Rubeus
           - Seeker
       input1:
-        description: "Hostname to key on"
+        description: "Restrict execution of loader to hostname."
         required: true
       input2:
-        description: "Domain to clone certificate from"
+        description: "Domain to copy certificate from. Used to generate a self-signed certificate and digitally sign the loader."
         required: true
 
 jobs:
