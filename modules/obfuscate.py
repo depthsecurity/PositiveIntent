@@ -138,7 +138,7 @@ def obfuscate_strings(content, obfuscation_map, string_map):
     string_pattern = re.compile(r'(".*?")')
     for match in string_pattern.finditer(content):
         original_string = match.group(1)
-        if original_string in const_strings or original_string in hostname_strings or original_string in obfuscation_map.values():
+        if "ntdll.dll" in original_string or original_string in const_strings or original_string in hostname_strings or original_string in obfuscation_map.values():
             string_map[original_string] = original_string
         else:
             obfuscate_string(original_string, string_map)
