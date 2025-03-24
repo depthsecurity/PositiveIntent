@@ -67,4 +67,9 @@ python build.py --file /tmp/Rubeus.exe --hostname TEST --domain www.zoom.com
 - ???
 
 ## References
-[Anatomy of a .NET Assembly – The DOS Stub](https://www.red-gate.com/simple-talk/blogs/anatomy-of-a-net-assembly-the-dos-stub/)
+[Anatomy of a .NET Assembly – The DOS Stub](https://www.red-gate.com/simple-talk/blogs/anatomy-of-a-net-assembly-the-dos-stub/)  
+[A Dive Into the PE File Format](https://0xrick.github.io/win-internals/pe3)  
+[Red Team Tradecraft: Loading Encrypted C# Assemblies In Memory](https://www.mike-gualtieri.com/posts/red-team-tradecraft-loading-encrypted-c-sharp-assemblies-in-memory)  
+[Building, Modifying, and Packing with Azure DevOps](https://blog.xpnsec.com/building-modifying-packing-devops/)  
+[DeepSeek](https://deepseek.com/) (THE GOAT)  
+[ChatGPT](https://chatgpt.com/)  
