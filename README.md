@@ -55,6 +55,7 @@ python build.py --file /tmp/Rubeus.exe --hostname TEST --domain www.zoom.com
 | Windows Defender | Rubeus | Undetected (03/23/2025) |
 | Windows Defender | Seatbelt | Undetected (10/10/2024) |
 | ESET | Rubeus | Undetected (10/18/2024) |
+| Carbon Black | Rubeus | Detected (Behavioral) |
 
 ## Roadmap
 
@@ -69,6 +70,7 @@ python build.py --file /tmp/Rubeus.exe --hostname TEST --domain www.zoom.com
 ## References
 [Anatomy of a .NET Assembly – The DOS Stub](https://www.red-gate.com/simple-talk/blogs/anatomy-of-a-net-assembly-the-dos-stub/)  
 [A Dive Into the PE File Format](https://0xrick.github.io/win-internals/pe3)  
+[Hiding your .NET - ETW](https://blog.xpnsec.com/hiding-your-dotnet-etw/)  
 [Red Team Tradecraft: Loading Encrypted C# Assemblies In Memory](https://www.mike-gualtieri.com/posts/red-team-tradecraft-loading-encrypted-c-sharp-assemblies-in-memory)  
 [Building, Modifying, and Packing with Azure DevOps](https://blog.xpnsec.com/building-modifying-packing-devops/)  
 [DeepSeek](https://deepseek.com/) (THE GOAT)  
