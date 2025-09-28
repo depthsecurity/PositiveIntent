@@ -10,11 +10,10 @@ namespace PositiveIntent
     {
         public static void LoadAssembly(string[] args)
         {
-            //byte[] encryptedAssembly = Properties.Resources.File1;
             var chunks = new List<byte[]>();
 
-            // Load all chunks from resources (they're stored as base64 in .resx but accessed as byte[])
-            chunks.Add(Resources.FileChunk1);
+            // Load all byte[] chunks from resources
+            chunks.Add(Resources.FileChunk1); // placeholder 
 
             // Calculate total size
             int totalSize = 0;
