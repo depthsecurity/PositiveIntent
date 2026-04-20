@@ -63,10 +63,10 @@ def save_pkcs12(cert, private_key, output_filename, password):
         f.write(p12)
 
 # Step 4: Digitally Sign Executable File
-def sign_executable(p12_path, assembly_name):
+def sign_executable(tmp_dir, p12_path, assembly_name):
 
-    unsigned_loader_path = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), f"../obfuscated_{assembly_name}.exe"))
-    signed_loader_path = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), f"../temp/{assembly_name}.exe"))
+    unsigned_loader_path = os.path.normpath(os.path.join(tmp_dir, f"obfuscated_{assembly_name}.exe"))
+    signed_loader_path = os.path.normpath(os.path.join(os.getcwd(), f"{assembly_name}.exe"))
     osslsigncode_path = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../windows_dependencies/osslsigncode.exe"))
 
     if sys.platform == 'win32':
@@ -92,10 +92,10 @@ def sign_executable(p12_path, assembly_name):
     
     subprocess.run(cmd, check=True, stdout = subprocess.DEVNULL)
 
-def run(domain, assembly_name):
+def run(tmp_dir, domain, assembly_name):
 
     # Configuration
-    output_dir =os.path.join(os.path.dirname(os.path.abspath(__file__)), f"../temp")
+    output_dir = tmp_dir
     password = b'DepthSecurity'
     
     # Fetch certificate
@@ -115,4 +115,4 @@ def run(domain, assembly_name):
     save_pkcs12(self_signed_cert, private_key, pkcs12_path, password)
 
     # Sign the executable file
-    sign_executable(pkcs12_path, assembly_name)
+    sign_executable(tmp_dir, pkcs12_path, assembly_name)

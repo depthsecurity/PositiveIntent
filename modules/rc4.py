@@ -45,7 +45,7 @@ def encrypt_file(filepath, key):
 
         return encrypted_bytes
 
-def update_resx(encrypted_bytes, num_chunks):
+def update_resx(tmp_dir, encrypted_bytes, num_chunks):
 
     #Split encrypted bytes array into specified number of chunks.
     chunk_size = len(encrypted_bytes) // num_chunks
@@ -62,7 +62,7 @@ def update_resx(encrypted_bytes, num_chunks):
         start = end
 
     # Parse existing .resx file
-    resx_path = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../temp/PositiveIntent/Properties/Resources.resx"))
+    resx_path = os.path.normpath(os.path.join(tmp_dir, "PositiveIntent/Properties/Resources.resx"))
     tree = ET.parse(resx_path)
     root = tree.getroot()
 
@@ -82,10 +82,10 @@ def update_resx(encrypted_bytes, num_chunks):
     # Write updated .resx file
     tree.write(resx_path, encoding="utf-8", xml_declaration=True)
 
-def update_designer(num_chunks):
+def update_designer(tmp_dir, num_chunks):
     
     #Add FileChunk entries to the Resources.Designer.cs file.
-    designer_path = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../temp/PositiveIntent/Properties/Resources.Designer.cs"))
+    designer_path = os.path.normpath(os.path.join(tmp_dir, "PositiveIntent/Properties/Resources.Designer.cs"))
     
     # Read the existing designer file
     with open(designer_path, 'r', encoding='utf-8') as f:
@@ -118,8 +118,8 @@ def update_designer(num_chunks):
     with open(designer_path, 'w', encoding='utf-8') as f:
         f.write(new_content)
 
-def run(file, num_chunks, key):
+def run(tmp_dir, file, num_chunks, key):
     
     encrypted_bytes = encrypt_file(file, key)
-    update_resx(encrypted_bytes, num_chunks)
-    update_designer(num_chunks)
+    update_resx(tmp_dir, encrypted_bytes, num_chunks)
+    update_designer(tmp_dir, num_chunks)

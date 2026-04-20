@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "PositiveIntent"
+version = "1.0.0"
+dependencies = [
+    "pyopenssl",
+    "cryptography",
+    "colorama",
+    "requests",
+]
+
+[project.scripts]
+pi_build = "modules.build:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["NetFuscator*", "PositiveIntent*", "modules*", "windows_dependencies*"]
+
+[tool.setuptools.package-data]
+"*" = ["**/*"]

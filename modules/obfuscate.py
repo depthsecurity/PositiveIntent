@@ -7,6 +7,8 @@ import colorama
 import shlex
 import xml.etree.ElementTree as ET
 
+CURRENT_SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
+
 def update_encryption_key(content):
     key = ''.join(random.choices(string.ascii_letters, k=16))
     content = re.sub(re.escape('public static byte[] key = Encoding.UTF8.GetBytes("DepthSecurity");'), f'public static byte[] key = Encoding.UTF8.GetBytes("{key}");', content)
@@ -45,23 +47,16 @@ def randomize_assembly_name(csproj_filepath, new_name):
 
     return new_name
         
-def run(hostname, num_chunks, args, writetofile):
-    # Input and output directories
-    input_dir = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../"))
-    output_dir =  os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../temp"))
+def run(tmp_dir, hostname, num_chunks, args, writetofile):
+    # Copy entire project to temp directory
+    input_dir = os.path.normpath(os.path.join(CURRENT_SCRIPT_PATH, "../"))
+    shutil.copytree(input_dir, tmp_dir, dirs_exist_ok=True)
 
-    # Copy unobfuscated source to preserve it
-    if(os.path.exists(output_dir)):
-        shutil.rmtree(output_dir)
-        shutil.copytree(input_dir, output_dir)
-    else:
-        shutil.copytree(input_dir, output_dir)
-
-    csproj_filepath = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../temp/PositiveIntent/PositiveIntent.csproj"))
+    csproj_filepath = os.path.normpath(os.path.join(tmp_dir, 'PositiveIntent/PositiveIntent.csproj'))
     assembly_name = randomize_assembly_name(csproj_filepath, ''.join(random.choices(string.ascii_letters, k=8)))
     
     # Loop over source files and update user-supplied hostname/args/writetofile options as well as resource file references
-    for root, dirs, files in os.walk(output_dir, topdown=True):
+    for root, dirs, files in os.walk(tmp_dir, topdown=True):
         dirs[:] = [d for d in dirs if d not in ("bin", "obj", "Resources", "Properties")]
         for file_name in files:
             file_path = os.path.join(root, file_name)

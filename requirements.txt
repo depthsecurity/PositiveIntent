@@ -1,4 +1,0 @@
-pyopenssl
-cryptography
-colorama
-requests
