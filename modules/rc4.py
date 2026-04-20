@@ -31,18 +31,19 @@ class RC4:
             output[k] = data[k] ^ key_stream
         return output
 
-def encrypt_file(file, key):
+def encrypt_file(filepath, key):
 
     # Read the input file into a byte array
-    file_bytes = file.read()
+    with open(filepath, 'rb') as file:
+        file_bytes = file.read()
     
-    # Create an instance of the RC4 class
-    rc4 = RC4(key)
+        # Create an instance of the RC4 class
+        rc4 = RC4(key)
 
-    # Encrypt the file bytes
-    encrypted_bytes = rc4.encrypt_decrypt(file_bytes)
+        # Encrypt the file bytes
+        encrypted_bytes = rc4.encrypt_decrypt(file_bytes)
 
-    return encrypted_bytes
+        return encrypted_bytes
 
 def update_resx(encrypted_bytes, num_chunks):
 
