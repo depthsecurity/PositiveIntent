@@ -18,14 +18,14 @@ def main():
 
     # custom imports
     try:
-	from modules import update
-	from modules import rc4
-	from modules import entropy
+        from modules import update
+        from modules import rc4
+        from modules import entropy
     except ImportError:
-	import update
-	import rc4
-	import entropy
-
+        import update
+        import rc4
+        import entropy
+        
     if sys.platform == 'win32':
         colorama.init()
     
