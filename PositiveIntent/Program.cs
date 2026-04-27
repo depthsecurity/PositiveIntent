@@ -56,14 +56,8 @@ namespace PositiveIntent
                         File.WriteAllBytes($"{Directory.GetCurrentDirectory()}\\log.txt", bytes);
                     }
 
-                    try
-                    {
-                        BreakpointHelper.Teardown();
-                    }
-                    catch (DivideByZeroException)
-                    {
-                        Environment.Exit(2);
-                    }
+                    // Remove VEH and HWBPs so they aren't triggered during CLR shutdown (which causes WerFault to trigger and dump the process)
+                    BreakpointHelper.Teardown();
                 }
             }
             // TODO: improve exception handling both globally and locally - handle some exceptions locally if recoverable

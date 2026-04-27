@@ -121,7 +121,6 @@ namespace PositiveIntent
                     context.ContextFlags |= CONTEXT_DEBUG_REGISTERS;
                     Marshal.StructureToPtr(context, exceptionInfo.ContextRecord, false);
                     breakpointsSet = false;
-
                 }
                 return EXCEPTION_CONTINUE_SEARCH;
             }
@@ -218,20 +217,23 @@ namespace PositiveIntent
         public static void Teardown()
         {
             clearRequested = true;
+
+            // intentionally trigger VEH again to clear HWBPs
             try { int x = 1, y = 0, _ = x / y; } catch (DivideByZeroException) { }
 
-            if (vehHandle != IntPtr.Zero)
+            // As long as Dr0-Dr2, Dr7, and Dr6 are cleared, it doesn't seem to matter if we remove the VEH or not. One less Win32 API call is better than more, so commenting this out for now.
+            /*if (vehHandle != IntPtr.Zero)
             {
                 object[] parameters = new object[] { vehHandle };
                 Generic.DynamicApiInvoke<uint>("kernel32.dll", "RemoveVectoredExceptionHandler", typeof(RemoveVectoredExceptionHandlerDelegate), ref parameters);
                 vehHandle = IntPtr.Zero;
-            }
+            }*/
         }
 
         public static void SetupHandler()
         {
             object[] parameters = new object[] { (uint)1, Marshal.GetFunctionPointerForDelegate(handlerDelegate) };
-            Generic.DynamicApiInvoke<IntPtr>("kernel32.dll", "AddVectoredExceptionHandler", typeof(AddVectoredExceptionHandler), ref parameters);
+            vehHandle = Generic.DynamicApiInvoke<IntPtr>("kernel32.dll", "AddVectoredExceptionHandler", typeof(AddVectoredExceptionHandler), ref parameters);
         }
     }
 }
